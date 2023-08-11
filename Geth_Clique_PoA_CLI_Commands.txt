@@ -1,0 +1,24 @@
+The below CLI commands allow for the bootnode and 5 signer nodes to run on the Ubuntu VM. 
+
+Make sure that you are in the ~/Documents/Ethereum_Testnet directory before running each command. 
+
+BOOT NODE: 
+bootnode -nodekey boot.key -addr :30305
+
+NODE1: 
+geth --datadir node1 --port 30306 --bootnodes enode://d9458ac41ca7d6115589c1e76da027d41a37ea6ca59177137f91404339fc5241d603d5f4d96744e5b217102881a0d09e4a073fdb0b29daa1b63f043a4c425566@127.0.0.1:0?discport=30305 --networkid 15201  --unlock 150a3eb7B73B9E7934Ff62BAa642d7eCF57C8Eb4 --password node1/password.txt --authrpc.port 8551
+
+NODE2: 
+geth --datadir node2 --port 30307 --bootnodes enode://d9458ac41ca7d6115589c1e76da027d41a37ea6ca59177137f91404339fc5241d603d5f4d96744e5b217102881a0d09e4a073fdb0b29daa1b63f043a4c425566@127.0.0.1:0?discport=30305 --networkid 15201 --unlock F6b36197A624Ed34D0B13CB06328EFF15dC13ef7 --password node2/password.txt --authrpc.port 8552
+
+NODE3: 
+eth --datadir node3 --port 30308 --bootnodes enode://d9458ac41ca7d6115589c1e76da027d41a37ea6ca59177137f91404339fc5241d603d5f4d96744e5b217102881a0d09e4a073fdb0b29daa1b63f043a4c425566@127.0.0.1:0?discport=30305 --networkid 15201 --unlock 9d0A9C2cb451DB13d78E22b0F691ca5499Ba4fB1 --password node3/password.txt --authrpc.port 8553
+
+NODE4: 
+geth --datadir node4 --port 30309 --bootnodes enode://d9458ac41ca7d6115589c1e76da027d41a37ea6ca59177137f91404339fc5241d603d5f4d96744e5b217102881a0d09e4a073fdb0b29daa1b63f043a4c425566@127.0.0.1:0?discport=30305 --networkid 15201 --unlock 0114803acfCBEf3845A890452D8ED4CF434827C0 --password node4/password.txt --authrpc.port 8554
+
+NODE5: 
+geth --datadir node4 --port 30309 --bootnodes enode://d9458ac41ca7d6115589c1e76da027d41a37ea6ca59177137f91404339fc5241d603d5f4d96744e5b217102881a0d09e4a073fdb0b29daa1b63f043a4c425566@127.0.0.1:0?discport=30305 --networkid 15201 --unlock 0114803acfCBEf3845A890452D8ED4CF434827C0 --password node4/password.txt --authrpc.port 8554
+
+
+
