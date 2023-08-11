@@ -4,6 +4,7 @@ from web3 import Web3
 import os 
 from solcx import compile_standard, install_solc
 from dotenv import load_dotenv
+from web3_input_decoder import decode_constructor, decode_function 
 import json 
 import time
 
@@ -58,11 +59,17 @@ signed_tx = w3.eth.account.sign_transaction(transaction, private_key=private_key
 tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
 tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
+#NOTE: This code block sends transactions from Node 1 to Node 2
+#Generate new nonce; each tx requires a unique nonce value 
+nonce = w3.eth.get_transaction_count(node_addresses[0])
+
+transaction = RSU_Application.functions.create_SensorReadout("Connected_Vehicle", "TIME", False, False, False).build_transaction({"chainId": chain_id, "from": node_addresses[0], "to": node_addresses[1], "nonce": nonce})
+signed_tx = w3.eth.account.sign_transaction(transaction, private_key=private_keys[0])
+tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
 
-#Generate 100 transactions with simulated sensor data readouts to confirm baseline operation of smart contract
-
-
+#Generate 10 transactions with simulated sensor data readouts to confirm baseline operation of smart contract
 for i in range(100):
 
     #NOTE: This code block sends transactions from Node 1 to Node 2
@@ -74,6 +81,14 @@ for i in range(100):
     tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
     tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
+    #NOTE: This code block analyzes a smart contract transaction and outputs the func_obj (i.e., function called) and func_params (i.e., function inputs)
+    tx = w3.eth.get_transaction(tx_hash)
+    func_obj, func_params = RSU_Application.decode_function_input(tx["input"])
+
+    print(func_obj)
+    print(func_params)
+    print('')
+
     time.sleep(1) #Sleep for 1 second between transactions 
 
     #NOTE: This code block sends transactions from Node 2 to Node 1
@@ -84,3 +99,14 @@ for i in range(100):
     signed_tx = w3.eth.account.sign_transaction(transaction, private_key=private_keys[1])
     tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
     tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+
+    #NOTE: This code block analyzes a smart contract transaction and outputs the func_obj (i.e., function called) and func_params (i.e., function inputs)
+    tx = w3.eth.get_transaction(tx_hash)
+    func_obj, func_params = RSU_Application.decode_function_input(tx["input"])
+
+    print(func_obj)
+    print(func_params)
+    print('')
+
+    time.sleep(1) #Sleep for 1 second between transactions 
+
