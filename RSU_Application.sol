@@ -1,7 +1,29 @@
 //SPDX-License-Identifier: MIT 
-pragma solidity >=0.8.18; 
+pragma solidity >=0.8.21; 
 
-contract RSU_Application {
+//contract Ownable based on tutorial: https://docs.openzeppelin.com/contracts/2.x/access-control
+contract Ownable {
+    address private contractOwner; 
+
+    //constructor() --> Define contract_owner address for ownable contract
+    constructor() {
+        contractOwner = msg.sender; 
+    }//end constructor()
+
+    //access_control modifer --> Only contract_onwer can create an instance of the Ownable contract
+    modifier only_contractOwner {require(isOwner(), "Passed address is not contractOwner"); _;}
+
+
+    function getOwner() public view returns(address) {
+        return contractOwner; 
+    }
+
+    function isOwner() public view returns(bool) {
+        return msg.sender == contractOwner; 
+    }
+}//end contract Ownable 
+
+contract RSU_Application is Ownable {
 
     //Define Sensor_Data_Readout struct --> CV, AV sensor readout format defined in Thesis Chapter 2 
     struct Sensor_Data_Readout {
@@ -16,15 +38,15 @@ contract RSU_Application {
     mapping(address => Sensor_Data_Readout) public _sensorReadout; 
 
     //Map input address to uint256, define as reputationScore mapping 
-    mapping(address => uint256) public reputationScore; 
+    mapping(address => uint256) private reputationScore; 
 
     //Define RSU_Ethereum_Addresses --> Array of Ethereum addresses for simulated RSU devices
-    address[] public RSU_Ethereum_Addresses;
+    address[] private RSU_Ethereum_Addresses;
 
     //Declare constructor() --> Blank placeholder for future development (if needed) 
-    constructor() {
+    //constructor() {
         //Placeholder for future development
-    }
+    //}
 
     //function create_SensorReadout() --> Writes a CV, AV, or RSU sensor readout format message to the blockchain
     function create_SensorReadout(string memory entity_id, string memory timestamp, bool emergency_stop, bool slow_caution, bool stop_vru) external {
@@ -44,34 +66,34 @@ contract RSU_Application {
     }//end initialize_reputationScore()
 
     //function get_reputationScores() --> Print the requested reputation score (single score/indexed value)
-    function get_reputationScore(uint i) public view returns (uint) {
-        address index = RSU_Ethereum_Addresses[i];
-        return reputationScore[index];
+    function get_reputationScore(address RSU_Address) public view returns (uint) {
+        //address index = RSU_Ethereum_Addresses[i];
+        return reputationScore[RSU_Address];
     }//end get_reputationScores()
 
     //function increase_reputationScore() --> Increase reputation score by 5 units with a maximum cap of 100 units
-    function increase_reputationScore(uint i) public returns (uint) {
-        address index = RSU_Ethereum_Addresses[i]; 
-        uint current_reputationScore = reputationScore[index];
+    function increase_reputationScore(address RSU_Address) public returns (uint) {
+        //address index = RSU_Ethereum_Addresses[i]; 
+        uint current_reputationScore = reputationScore[RSU_Address];
         current_reputationScore = current_reputationScore + 5;
 
         if (current_reputationScore > 100) {
             current_reputationScore  = 100; 
-            reputationScore[index] = current_reputationScore;
+            reputationScore[RSU_Address] = current_reputationScore;
         } else {
-            reputationScore[index] = current_reputationScore;
+            reputationScore[RSU_Address] = current_reputationScore;
         }
 
-        return reputationScore[index];
+        return reputationScore[RSU_Address];
     }//end increase_reputationScore() 
 
     //function  decrease_reputationScore() --> Decrease reputation score by 30 (called upon for bad RSU message, etc.) 
-    function decrease_reputationScore(uint i) public returns (uint) {
-        address index = RSU_Ethereum_Addresses[i];
-        uint current_reputationScore = reputationScore[index]; 
+    function decrease_reputationScore(address RSU_Address) public returns (uint) {
+        //address index = RSU_Ethereum_Addresses[i];
+        uint current_reputationScore = reputationScore[RSU_Address]; 
         current_reputationScore = current_reputationScore - 30; 
-        reputationScore[index] = current_reputationScore;
-        return reputationScore[index];
+        reputationScore[RSU_Address] = current_reputationScore;
+        return reputationScore[RSU_Address];
     }//end decrease_reputationScore()
 
 } //end contract RSU_Application
