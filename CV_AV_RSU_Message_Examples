@@ -1,0 +1,25 @@
+ENTITY_ID, TIMESTAMP, EMERGENCY_STOP, SLOW_CAUTION, STOP_VRU
+
+"Connected_Vehicle", "MIDNIGHT", false, false, false --> VALID CV MESSAGE 
+
+"Connected_Vehicle", "MIDNIGHT", false, false, true --> VALID CV MESSAGE 
+
+"Connected_Vehicle", "MIDNIGHT", true, false, false --> INVALID CV MESSAGE 
+
+"Connected_Vehicle", "MIDNIGHT", false, true, false --> INVALID CV MESSAGE 
+
+"Autonomous_Vehicle", "MIDNIGHT", false, false, false --> VALID CV MESSAGE 
+
+"Autonomous_Vehicle", "MIDNIGHT", false, false, true --> VALID CV MESSAGE 
+
+"Autonomous_Vehicle", "MIDNIGHT", true, false, false --> INVALID CV MESSAGE 
+
+"Autonomous_Vehicle", "MIDNIGHT", false, true, false --> INVALID CV MESSAGE 
+
+"Roadside_Unit", "MIDNIGHT", true, false, false --> VALID RSU MESSAGE 
+
+"Roadside_Unit", "MIDNIGHT", false, true, false --> VALID RSU MESSAGE 
+
+"Roadside_Unit", "MIDNIGHT", true, true, true --> INVALID RSU MESSAGE 
+
+"Roadside_Unit", "MIDNIGHT", true, false, true --> INVALID RSU MESSAGE 
