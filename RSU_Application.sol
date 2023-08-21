@@ -26,8 +26,8 @@ contract Ownable {
     }//end isOwner()
 }//end contract Ownable 
 
-//contract RSU_Application --> Smart contract for continuous authentication of RSU devices 
-contract RSU_Application is Ownable {
+//contract RSU_continuousAuth --> Smart contract for continuous authentication of RSU devices 
+contract RSU_continuousAuth is Ownable {
 
     //Define Sensor_Data_Readout struct --> CV, AV sensor readout format defined in Thesis Chapter 2 
     struct Sensor_Data_Readout {
@@ -38,14 +38,17 @@ contract RSU_Application is Ownable {
         bool STOP_VRU; 
     }
 
-    //Map input addresses to Sensor_Data_Readout struct, define as _sensorReadout mapping (NOTE: Global mapping in RSU_Application context)
+    //Map input addresses to Sensor_Data_Readout struct, define as _sensorReadout mapping (NOTE: Global mapping in contract context)
     mapping(address => Sensor_Data_Readout) public _sensorReadout; 
 
-    //Map input address to int, define as reputationScore mapping (Note: Global mapping in RSU_Application context)
+    //Map input address to int, define as reputationScore mapping (Note: Global mapping in contract context)
     mapping(address => int) private reputationScore; 
 
     //Define RSU_Ethereum_Addresses --> Array of Ethereum addresses for simulated RSU devices
     address[] private RSU_Ethereum_Addresses;
+
+    //Define revoke_authToken() event --> Emits bool signal to web3.py application to revoke authentication token if true, else do nothing
+    event revoke_authToken(address RSU_Address, bool _revoke_authToken);
 
     //function initialize_reputationScore() --> Initializes reputation score of each RSU device to 100 (we assume initial deployment)
     function initialize_reputationScore(address[] memory _RSU_Ethereum_Addresses) public {
@@ -175,13 +178,33 @@ contract RSU_Application is Ownable {
 
     }//end is_messageValid()
 
-    //function create_SensorReadout() --> Writes a CV, AV, or RSU sensor readout format message to the blockchain
-    function create_SensorReadout(string memory entity_id, string memory timestamp, bool emergency_stop, bool slow_caution, bool stop_vru) external {
+    //function create_sensorReadout() --> Writes a CV, AV, or RSU sensor readout format message to the blockchain
+    function create_sensorReadout(string memory entity_id, string memory timestamp, bool emergency_stop, bool slow_caution, bool stop_vru) public {
         _sensorReadout[msg.sender].ENTITY_ID = entity_id; 
         _sensorReadout[msg.sender].TIMESTAMP = timestamp;
         _sensorReadout[msg.sender].EMERGENCY_STOP = emergency_stop;
         _sensorReadout[msg.sender].SLOW_CAUTION = slow_caution;
         _sensorReadout[msg.sender].STOP_VRU = stop_vru;
-    }//end create_SensorReadout()
+    }//end create_sensorReadout()
 
-} //end contract RSU_Application
+    //function publish_sensorReadout() --> Creates _sensorReadout message, evalutes message validity and increases/decreases reputationScore,
+    //                                     then applies evalutate_reputationScore() test and enforces reputation-based continuous authentication
+    function publish_sensorReadout(string memory entity_id, string memory timestamp, bool emergency_stop, bool slow_caution, bool stop_vru) public {
+
+        create_sensorReadout(entity_id, timestamp, emergency_stop, slow_caution, stop_vru);
+
+        if (is_messageValid() == true) {
+            increase_reputationScore(msg.sender);
+        } else {
+            decrease_reputationScore(msg.sender);
+        }
+
+        if (evaluate_reputationScore(msg.sender) == true) {
+            //Valid reputationScore, do nothing wrt authentication status 
+        } else {
+            //Emit revoke_authToken() event --> revokes authentication token for app-side de-authentication process 
+            emit revoke_authToken(msg.sender, true);
+        }
+    }//end publish_sensorReadout() 
+
+} //end contract RSU_continuousAuth
