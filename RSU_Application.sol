@@ -39,7 +39,7 @@ contract RSU_continuousAuth is Ownable {
     }
 
     //Map input addresses to Sensor_Data_Readout struct, define as _sensorReadout mapping (NOTE: Global mapping in contract context)
-    mapping(address => Sensor_Data_Readout) public _sensorReadout; 
+    mapping(address => Sensor_Data_Readout) private _sensorReadout; 
 
     //Map input address to int, define as reputationScore mapping (Note: Global mapping in contract context)
     mapping(address => int) private reputationScore; 
@@ -59,44 +59,44 @@ contract RSU_continuousAuth is Ownable {
     }//end initialize_reputationScore()
 
     //function get_reputationScores() --> Print the requested reputation score (single score/indexed value)
-    function get_reputationScore(address RSU_Address) public view returns (int) {
-        return reputationScore[RSU_Address];
+    function get_reputationScore() public view returns (int) {
+        return reputationScore[msg.sender];
     }//end get_reputationScores()
 
     //function increase_reputationScore() --> Increase reputation score by 5 units with a maximum cap of 100 units
-    function increase_reputationScore(address RSU_Address) public returns (int) {
-        int current_reputationScore = reputationScore[RSU_Address];
+    function increase_reputationScore() private returns (int) {
+        int current_reputationScore = reputationScore[msg.sender];
         current_reputationScore = current_reputationScore + 5;
 
         if (current_reputationScore > 100) {
             current_reputationScore = 100; 
-            reputationScore[RSU_Address] = current_reputationScore;
+            reputationScore[msg.sender] = current_reputationScore;
         } else {
-            reputationScore[RSU_Address] = current_reputationScore;
+            reputationScore[msg.sender] = current_reputationScore;
         }
 
-        return reputationScore[RSU_Address];
+        return reputationScore[msg.sender];
     }//end increase_reputationScore() 
 
     //function  decrease_reputationScore() --> Decrease reputation score by 30 (called upon for bad RSU message, etc.) 
-    function decrease_reputationScore(address RSU_Address) public returns (int) {
-        int current_reputationScore = reputationScore[RSU_Address]; 
+    function decrease_reputationScore() private returns (int) {
+        int current_reputationScore = reputationScore[msg.sender]; 
         current_reputationScore = current_reputationScore - 20; 
 
         if (current_reputationScore <= 0) {
             current_reputationScore = 0; 
-            reputationScore[RSU_Address] = current_reputationScore;
+            reputationScore[msg.sender] = current_reputationScore;
         } else {
-            reputationScore[RSU_Address] = current_reputationScore;
+            reputationScore[msg.sender] = current_reputationScore;
 
         }
 
-        return reputationScore[RSU_Address];
+        return reputationScore[msg.sender];
     }//end decrease_reputationScore()
 
     //function evaluate_reputationScore() --> If reputationScore >= 60, return bool True; else, return bool False
-    function evaluate_reputationScore(address RSU_Address) public view returns (bool) {
-        if (reputationScore[RSU_Address] >= 60) {
+    function evaluate_reputationScore() public view returns (bool) {
+        if (reputationScore[msg.sender] >= 60) {
             return true;
         } else {
             return false; 
@@ -179,7 +179,7 @@ contract RSU_continuousAuth is Ownable {
     }//end is_messageValid()
 
     //function create_sensorReadout() --> Writes a CV, AV, or RSU sensor readout format message to the blockchain
-    function create_sensorReadout(string memory entity_id, string memory timestamp, bool emergency_stop, bool slow_caution, bool stop_vru) public {
+    function create_sensorReadout(string memory entity_id, string memory timestamp, bool emergency_stop, bool slow_caution, bool stop_vru) private {
         _sensorReadout[msg.sender].ENTITY_ID = entity_id; 
         _sensorReadout[msg.sender].TIMESTAMP = timestamp;
         _sensorReadout[msg.sender].EMERGENCY_STOP = emergency_stop;
@@ -194,12 +194,12 @@ contract RSU_continuousAuth is Ownable {
         create_sensorReadout(entity_id, timestamp, emergency_stop, slow_caution, stop_vru);
 
         if (is_messageValid() == true) {
-            increase_reputationScore(msg.sender);
+            increase_reputationScore();
         } else {
-            decrease_reputationScore(msg.sender);
+            decrease_reputationScore();
         }
 
-        if (evaluate_reputationScore(msg.sender) == true) {
+        if (evaluate_reputationScore() == true) {
             //Valid reputationScore, do nothing wrt authentication status 
         } else {
             //Emit revoke_authToken() event --> revokes authentication token for app-side de-authentication process 
