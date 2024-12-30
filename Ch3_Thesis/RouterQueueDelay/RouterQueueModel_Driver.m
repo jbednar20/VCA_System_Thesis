@@ -1,7 +1,7 @@
 clear all, close all, clc;
 
 %Define C_a --> Coefficient of variation for the packet arrival rate at router
-C_a = [1, 1.15, 1.30, 1.5];
+C_a = [1, 1.25, 1.5];
 
 %Define C_s --> Coefficient of variation for the packet service rate of router
 C_s = 1;
