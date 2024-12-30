@@ -14,13 +14,15 @@ function [Wq_ms, max_devices] = RouterQueueModel(C_a, C_s, s, lambda_device, mu_
 max_devices = floor(1 / (lambda_device / (s*mu_router)));
 
 %Define rho --> Utilization rate vector (0, 1) for the router
-rho = 0:1/(max_devices-1):1;
+rho_vector = 1 / (lambda_device / (s*mu_router));
+
+rho = 0:1/rho_vector:1;
 
 %Define Wq --> Router Queuing Delay in seconds
-Wq = zeros(length(C_a),max_devices);
+Wq = zeros(length(C_a),max_devices+1);
 
 %Define Wq_ms --> Router Queuing Delay in milliseconds
-Wq_ms = zeros(length(C_a),max_devices);
+Wq_ms = zeros(length(C_a),max_devices+1);
 
 %Calculate Queuing Delay (Wq and Wq_ms) data values for the router
 for i = 1:length(C_a)
