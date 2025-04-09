@@ -1,0 +1,3 @@
+This repo contains the code used in my Master's thesis, "Systematic Design of Blockchain-Based Continuous Authentication Towards Vulnerable Road User (VRU) Safety"
+
+The repo is broken into two main directories. The Chapter 3 directory contains the code relevant to... The Chapter 4 directory...
