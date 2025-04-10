@@ -45,8 +45,8 @@ w3 = Web3(Web3.HTTPProvider("HTTP://172.29.208.1:7545"))
 # Define chain_id (i.e., NetworkID), and declare node addresses/private keys 
 # TODO: Rewrite code to remove private keys from final code on any public repo (Github, etc.)
 chain_id = 1337
-node_addresses = ["0x8120E4AeB4B54CE709280041f6be1204aefF6Db0", "0xa7Aa0698b0D72866f16813Ec9B43749e97E06cfF"]
-private_keys = ["0xae328940a41ad1be265e2012c8d1be53c423216c48d4168dd2eea405180425fe", "0xe7d87fd3d59e71409cf4cd413ab49741c2213632b2434d66123ccece6b3db1e6"]
+node_addresses = []
+private_keys = []
 
 # Instantiate an instance of the RSU Application smart contract on Ganache (Virtualized Ethereum PoS Testnet)
 RSU_Application = w3.eth.contract(abi=abi, bytecode=bytecode)
