@@ -23,9 +23,9 @@ To execute the CAV Emergency Message Application, please follow the below steps:
 
 3. First, start-up the MQTT application instance by entering the following command into the selected terminal:
 
-  python MQTT_Application.py -ip 127.0.0.1 -p 1883 -c RSU -qos 1 -vru 1
+&nbsp;&nbsp;&nbsp;&nbsp;python MQTT_Application.py -ip 127.0.0.1 -p 1883 -c RSU -qos 1 -vru 1
 
-Note that the -ip flag defines the IP address (in this case localhost), -p defines the port, -c defines which client is used (RSU), -qos selects the MQTT QoS level, and -vru 1 assumes that a VRU will at some point present itself. 
+&nbsp;&nbsp;&nbsp;&nbsp;Note that the -ip flag defines the IP address (in this case localhost), -p defines the port, -c defines which client is used (RSU), -qos selects the MQTT QoS level, and -vru 1 assumes that a VRU will at some point present itself. 
 
 4. Next, start the MQTT sensor instance by entering the following command into the other terminal:
 
