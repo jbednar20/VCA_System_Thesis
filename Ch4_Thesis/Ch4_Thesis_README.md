@@ -1,0 +1,2 @@
+# Ch4_Thesis README 
+The Ch4_Thesis_README file details how to run the code. The execution of the code as-written relies on the use of Truffle Suite Ganache for Ethereum blockchain emulation. As of Spring 2025 the Truffle Suite has been deprecated, with development support having shifted to different priorities as part of the Consensys/Hardhat partnership. However, the Truffle Suite (specifically the Truffle and Ganache utilities) remain available in a public archive (archive.trufflesuite.com/ganache).
