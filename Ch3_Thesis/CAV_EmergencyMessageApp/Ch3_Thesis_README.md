@@ -17,7 +17,7 @@ The code for this project consists of four files, each of which is written in Py
 ## Instructions 
 To execute the CAV Emergency Message Application, please follow the below steps: 
 
-1. Ensure that the machine you are using as the following Python libraries installed: time, sys, paho.mqtt.client, argparse, random, and json. The "pip install" command is a reliable way to accomplish this task.
+1. Ensure that the machine you are using as the following Python libraries installed: time, sys, paho.mqtt.client, argparse, random, and json. The "pip install" command is a reliable way to accomplish this task. Download the code files for this project to the same directory. 
 
 2. On Linux-based systems, launch two instances of the terminal window. (On Windows, launching two instances of the command window is preferred). One instance will serve as execution platform for the MQTT sensor, and one instance will serve as the execution platform for the MQTT application. 
 
