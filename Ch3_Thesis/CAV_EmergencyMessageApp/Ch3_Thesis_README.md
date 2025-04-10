@@ -21,17 +21,13 @@ To execute the CAV Emergency Message Application, please follow the below steps:
 
 2. On Linux-based systems, launch two instances of the terminal window. (On Windows, launching two instances of the command window is preferred). One instance will serve as execution platform for the MQTT sensor, and one instance will serve as the execution platform for the MQTT application. 
 
-3. First, start-up the MQTT application instance by entering the following command into the selected terminal:
+3. First, start-up the MQTT application instance by entering the below command into the selected terminal. Note that the -ip flag defines the IP address (in this case localhost), -p defines the port, -c defines which client is used (RSU), -qos selects the MQTT QoS level, and -vru 1 assumes that a VRU will at some point present itself. 
 
 &nbsp;&nbsp;&nbsp;&nbsp;python MQTT_Application.py -ip 127.0.0.1 -p 1883 -c RSU -qos 1 -vru 1
 
-&nbsp;&nbsp;&nbsp;&nbsp;Note that the -ip flag defines the IP address (in this case localhost), -p defines the port, -c defines which client is used (RSU), -qos selects the MQTT QoS level, and -vru 1 assumes that a VRU will at some point present itself. 
+4. Next, start the MQTT sensor instance by entering the below command into the other terminal. Note that the -ip flag defines the IP address (in this case localhost), -p defines the port, -c defines which client is used (CV), -qos selects the MQTT QoS level, and -vru 1 assumes that a VRU will at some point present itself. 
 
-4. Next, start the MQTT sensor instance by entering the following command into the other terminal:
-
-  python MQTT_Sensors.py -ip 127.0.0.1 -p 1883 -c CV -qos 1 -vru 1
-
-Note that the -ip flag defines the IP address (in this case localhost), -p defines the port, -c defines which client is used (CV), -qos selects the MQTT QoS level, and -vru 1 assumes that a VRU will at some point present itself. 
+&nbsp;&nbsp;&nbsp;&nbsp;python MQTT_Sensors.py -ip 127.0.0.1 -p 1883 -c CV -qos 1 -vru 1
 
 5. Allow the MQTT_Application and MQTT_Sensors programs to execute in each terminal. Execution will end once the CV has detected the presence of a VRU in the intersection and informs the RSU, which sends an emergency stop command. 
 
